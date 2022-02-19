@@ -20,7 +20,7 @@ public class Main {
         UserServiceImpl service = new UserServiceImpl();
 
         service.createUsersTable();
-        userList.forEach(service);
+        userList.forEach(x -> service.saveUser(x.getName(), x.getLastName(), x.getAge()));
         service.getAllUsers();
         service.cleanUsersTable();
         service.dropUsersTable();

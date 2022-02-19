@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
-public class UserDaoJDBCImpl implements UserDao, Consumer<User> {
+public class UserDaoJDBCImpl implements UserDao {
     public UserDaoJDBCImpl() {
 
     }
@@ -41,6 +41,7 @@ public class UserDaoJDBCImpl implements UserDao, Consumer<User> {
         try {
             String query = "INSERT Users(name, lastname, age) VALUES ('" + name + "', '" + lastName + "', '" + age + "');";
             Util.getQuery(query);
+            System.out.println("User с именем – " + name + " добавлен в базу данных");
             Util.closeConnection();
         } catch (SQLException e) {
 
@@ -81,10 +82,4 @@ public class UserDaoJDBCImpl implements UserDao, Consumer<User> {
         }
     }
 
-    @Override
-    public void accept(User user) {
-
-        saveUser(user.getName(), user.getLastName(), user.getAge());
-        System.out.println("User с именем – " + user.getName() + " добавлен в базу данных");
-    }
 }

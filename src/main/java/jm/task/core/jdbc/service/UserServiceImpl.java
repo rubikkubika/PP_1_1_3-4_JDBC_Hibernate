@@ -10,20 +10,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
-public class UserServiceImpl implements UserService, Consumer<User> {
-    private List<User> userList = new ArrayList<>();
-
+public class UserServiceImpl implements UserService {
     public void createUsersTable() {
         UserDaoJDBCImpl userDaoJDBC = new UserDaoJDBCImpl();
         userDaoJDBC.createUsersTable();
     }
 
-    public void dropUsersTable()  {
+    public void dropUsersTable() {
         UserDaoJDBCImpl userDaoJDBC = new UserDaoJDBCImpl();
         userDaoJDBC.dropUsersTable();
     }
 
-    public void saveUser(String name, String lastName, byte age)  {
+    public void saveUser(String name, String lastName, byte age) {
         UserDaoJDBCImpl userDaoJDBC = new UserDaoJDBCImpl();
         userDaoJDBC.saveUser(name, lastName, age);
     }
@@ -31,20 +29,14 @@ public class UserServiceImpl implements UserService, Consumer<User> {
     public void removeUserById(long id) {
     }
 
-    public List<User> getAllUsers()  {
+    public List<User> getAllUsers() {
         UserDaoJDBCImpl userDaoJDBC = new UserDaoJDBCImpl();
         return userDaoJDBC.getAllUsers();
     }
 
-    public void cleanUsersTable()  {
+    public void cleanUsersTable() {
         UserDaoJDBCImpl userDaoJDBC = new UserDaoJDBCImpl();
         userDaoJDBC.cleanUsersTable();
 
-    }
-
-    @Override
-    public void accept(User user) {
-        UserDaoJDBCImpl userDaoJDBC = new UserDaoJDBCImpl();
-        userDaoJDBC.accept(user);
     }
 }
