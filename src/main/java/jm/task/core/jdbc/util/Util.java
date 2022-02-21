@@ -9,20 +9,10 @@ public class Util {
 
     private static Connection con;
     private static Statement stmt;
-    private static ResultSet rs;
 
-
-    public static void getConnection() throws SQLException {
+    public static Statement getConnection() throws SQLException {
         con = DriverManager.getConnection(url, user, password);
-        stmt = con.createStatement();
-    }
-
-    public static ResultSet getQuery(String query) throws SQLException {
-        Util.getConnection();
-        stmt.execute(query);
-        rs = stmt.getResultSet();
-
-        return rs;
+        return stmt = con.createStatement();
     }
 
     public static void closeConnection() throws SQLException {

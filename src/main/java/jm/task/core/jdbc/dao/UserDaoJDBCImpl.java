@@ -3,8 +3,10 @@ package jm.task.core.jdbc.dao;
 import jm.task.core.jdbc.model.User;
 import jm.task.core.jdbc.util.Util;
 
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
@@ -15,11 +17,16 @@ public class UserDaoJDBCImpl implements UserDao {
     }
 
     private List<User> userList = new ArrayList<>();
+    private Statement connection;
+    private static ResultSet rs;
 
     public void createUsersTable() {
         try {
-            String query = "CREATE TABLE IF NOT EXISTS users(ID int NOT NULL AUTO_INCREMENT,PRIMARY KEY (ID), name varchar(255), lastname varchar(255), age tinyint);";
-            Util.getQuery(query);
+            String query = "CREATE TABLE IF NOT EXISTS users(ID int NOT NULL AUTO_INCREMENT,PRIMARY KEY (ID), " +
+                    "name varchar(255), lastname varchar(255), age tinyint);";
+            connection = Util.getConnection();
+            connection.execute(query);
+            rs = connection.getResultSet();
             Util.closeConnection();
         } catch (SQLException e) {
 
@@ -29,7 +36,9 @@ public class UserDaoJDBCImpl implements UserDao {
     public void dropUsersTable() {
         try {
             String query = "DROP TABLE IF  EXISTS  users;";
-            Util.getQuery(query);
+            connection = Util.getConnection();
+            connection.execute(query);
+            rs = connection.getResultSet();
             Util.closeConnection();
         } catch (SQLException e) {
 
@@ -39,8 +48,11 @@ public class UserDaoJDBCImpl implements UserDao {
 
     public void saveUser(String name, String lastName, byte age) {
         try {
-            String query = "INSERT Users(name, lastname, age) VALUES ('" + name + "', '" + lastName + "', '" + age + "');";
-            Util.getQuery(query);
+            String query = "INSERT Users(name, lastname, age) VALUES ('" + name + "', " +
+                    "'" + lastName + "', '" + age + "');";
+            connection = Util.getConnection();
+            connection.execute(query);
+            rs = connection.getResultSet();
             System.out.println("User с именем – " + name + " добавлен в базу данных");
             Util.closeConnection();
         } catch (SQLException e) {
@@ -56,7 +68,9 @@ public class UserDaoJDBCImpl implements UserDao {
     public List<User> getAllUsers() {
         try {
             String query = "select * from users;";
-            ResultSet rs = Util.getQuery(query);
+            connection = Util.getConnection();
+            connection.execute(query);
+            rs = connection.getResultSet();
             int count = 0;
             while (rs.next()) {
                 userList.add(new User(rs.getString(2), rs.getString(3), rs.getByte(4)));
@@ -75,7 +89,9 @@ public class UserDaoJDBCImpl implements UserDao {
     public void cleanUsersTable() {
         try {
             String query = "TRUNCATE TABLE users;";
-            Util.getQuery(query);
+            connection = Util.getConnection();
+            connection.execute(query);
+            rs = connection.getResultSet();
             Util.closeConnection();
         } catch (SQLException e) {
 
