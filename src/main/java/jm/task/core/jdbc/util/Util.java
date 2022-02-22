@@ -10,13 +10,12 @@ public class Util {
     private static Connection con;
     private static Statement stmt;
 
-    public static Statement getConnection() throws SQLException {
-        con = DriverManager.getConnection(url, user, password);
-        return stmt = con.createStatement();
+    public static Connection getConnection() throws SQLException {
+
+        return con = DriverManager.getConnection(url, user, password);
     }
 
     public static void closeConnection() throws SQLException {
         con.close();
-        stmt.close();
     }
 }
