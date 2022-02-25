@@ -30,7 +30,7 @@ public class UserDaoHibernateImpl implements UserDao {
         session = Util.getSessionFactory().openSession();
         session.beginTransaction();
         session.createSQLQuery("CREATE TABLE IF NOT EXISTS users(ID int NOT NULL AUTO_INCREMENT,PRIMARY KEY (ID), " +
-        "name varchar(255), lastname varchar(255), age tinyint);").executeUpdate();
+                "name varchar(255), lastname varchar(255), age tinyint);").executeUpdate();
         session.close();
     }
 
@@ -46,17 +46,14 @@ public class UserDaoHibernateImpl implements UserDao {
     public void saveUser(String name, String lastName, byte age) {
         session = Util.getSessionFactory().openSession();
         session.beginTransaction();
-
         User user = new User();
         user.setName(name);
         user.setLastName(lastName);
         user.setAge(age);
-
         session.save(user);
         System.out.println("User с именем – " + name + " добавлен в базу данных");
-        session.getTransaction().commit();
         session.close();
-        }
+    }
 
     @Override
     public void removeUserById(long id) {
@@ -66,12 +63,7 @@ public class UserDaoHibernateImpl implements UserDao {
     @Override
     public List<User> getAllUsers() {
         session = Util.getSessionFactory().openSession();
-        CriteriaBuilder cb = session.getCriteriaBuilder();
-        CriteriaQuery cq = cb.createQuery(User.class);
-        Root<User> root = cq.from(User.class);
-        cq.select(root);
-
-        Query query = session.createQuery(cq);
+        Query query = session.createQuery("from User");
         userList = query.getResultList();
         userList.forEach(x -> System.out.println(x.toString()));
         session.close();
@@ -81,14 +73,8 @@ public class UserDaoHibernateImpl implements UserDao {
     @Override
     public void cleanUsersTable() {
         session = Util.getSessionFactory().openSession();
-        CriteriaBuilder cb = session.getCriteriaBuilder();
-        CriteriaDelete<User> criteriaDelete = cb.createCriteriaDelete(User.class);
-        Root<User> root = criteriaDelete.from(User.class);
-        criteriaDelete.from(root.getModel());
-
-        Transaction transaction = session.beginTransaction();
-        session.createQuery(criteriaDelete).executeUpdate();
-        transaction.commit();
+        session.beginTransaction();
+        session.createQuery("delete User").executeUpdate();
         session.close();
     }
 }
